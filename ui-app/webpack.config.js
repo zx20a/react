@@ -32,11 +32,7 @@ module.exports = {
         loader: 'style-loader!css-loader'
       },
       {
-        test: /\.svg$/,
-        loader: 'svg-react-loader'
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/i,
+        test: /\.(jpe?g|png|gif|svg|ico)$/i,
         loaders: [
           'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
           'image-webpack-loader'
@@ -51,17 +47,18 @@ module.exports = {
       inject: 'body',
       template: path.resolve(__dirname, 'public/index.tmpl.html'),
     }),
-    // new FaviconsWebpackPlugin({
-    //   logo: path.resolve(__dirname, 'public/favicon.ico'),
-    //   prefix: 'assets/icons-[hash]',
-    //   inject: true,
-    //   background: '#ffffff',
-    //   title: 'React Webpack App',
-    //   icons: {
-    //     android: true,
-    //     favicons: true,
-    //     firefox: true
-    //   }
-    // })
+    new FaviconsWebpackPlugin({
+      logo: path.resolve(__dirname, 'src/test.jpg'),
+      prefix: 'assets/icons-[hash]',
+      inject: true,
+      background: '#ffffff',
+      title: 'React Webpack App',
+      icons: {
+        android: true,
+        favicons: true,
+        firefox: true,
+        windows: true
+      }
+    })
   ]
 };

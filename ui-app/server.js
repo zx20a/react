@@ -10,8 +10,11 @@ app.use(require('webpack-dev-middleware')(compiler, {
   publicPath: config.output.publicPath
 }));
 
+// app.use(express.static(path.resolve(__dirname, 'dist')));
+// app.use(express.static(path.resolve(__dirname, 'public')));
+
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
+  res.sendFile(path.resolve(__dirname, 'dist/index.html'));
 });
 
 app.listen(8000, function(err) {
