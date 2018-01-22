@@ -1,3 +1,18 @@
+1. Install dependency 
+    sudo apt-get install libtool autoconf automake m4 nasm pkg-config gettext libtool pngquant libpng-dev
+2. Install nvm
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+    source ~/.bashrc
+    nvm -v
+3. Uss nvm to install npm 8.9.1 (LTS)
+    nvm install 8
+4. Install gRPC 1.8.1
+  git clone https://github.com/grpc/grpc.git
+  git checkout v1.8.1
+  git submodules update --init
+  make
+  sudo make install
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

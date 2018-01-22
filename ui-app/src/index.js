@@ -1,35 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {createMuiTheme} from 'material-ui/styles'
+import {lightBlue500} from 'material-ui/colors'
 import registerServiceWorker from './registerServiceWorker';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import App from './App';
+import 'typeface-roboto'
+import './index.css';
 
-import {IntlProvider, addLocaleData} from 'react-intl';
-import en from 'react-intl/locale-data/en';
-import zh from 'react-intl/locale-data/zh';
-import es from 'react-intl/locale-data/es';
-addLocaleData([...en, ...zh, ...es]);
+import todoApp from './Reducers'
 
-chooseLocale => {
-  switch(navigator.language.split('_')[0]){
-    case 'en':
-      return 'en_US';
-      break;
-    case 'zh':
-      return 'zh_TW';
-      break;
-    default:
-      return 'en_US';
-      break;
-  }
-}
-// console.log(chooseLocale());
+const muiTheme = createMuiTheme({
+	palette: {
+		paccent1Color: lightBlue500,
+	}
+})
+
+let store = createStore(todoApp)
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
+
+
+const ThemeApp = () => (
+  <MuiThemeProvider theme={muiTheme}>
+    <App />
+  </MuiThemeProvider>
+);
 
 ReactDOM.render(
-  // <IntlProvider locale = {navigator.language} key = {navigator.language}
-  //   messages = {chooseLocale()}
-  // >
-    <App />,
-  // </IntlProvider>,
+  <Provider store={store}>
+    <ThemeApp />
+  </Provider>,
   document.getElementById('root'));
 registerServiceWorker();

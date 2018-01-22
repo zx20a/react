@@ -1,5 +1,6 @@
 var path = require('path');
 var express = require('express');
+var router = express.Router();
 var app = express();
 var webpack = require('webpack');
 var config = require('./webpack.config');
@@ -10,7 +11,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
   publicPath: config.output.publicPath
 }));
 
-// app.use(express.static(path.resolve(__dirname, 'dist')));
+app.use(express.static(path.resolve(__dirname, 'dist')));
 // app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.get('*', function(req, res) {

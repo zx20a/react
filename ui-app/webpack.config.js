@@ -24,7 +24,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['env', 'react'],
+          presets: ['es2015', 'react', 'stage-2'],
         }
       },
       {
@@ -32,9 +32,13 @@ module.exports = {
         loader: 'style-loader!css-loader'
       },
       {
+        test: /\.(woff|woff2|eot|ttf)$/,
+        loader: 'file-loader?name=fonts/[name].[ext]'
+      },
+      {
         test: /\.(jpe?g|png|gif|svg|ico)$/i,
         loaders: [
-          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+          'file-loader?hash=sha512&digest=hex&name=image/[hash].[ext]',
           'image-webpack-loader'
         ]
       }
