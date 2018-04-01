@@ -1,5 +1,5 @@
 const zh_TW = {
-  hello: "你好",
+  hello: "台達RABD讚",
   superHello: "你好, {someone}"
 }
 

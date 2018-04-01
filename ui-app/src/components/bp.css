@@ -1,0 +1,16 @@
+.breakpoints {
+  width: 0.8em;
+  background: #c8a2d7;
+  padding: 4px 0;
+}
+.CodeMirror-linenumbers {
+  width: 0.8em;
+  background: #c8d2d7;
+}
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 0.8em;
+  text-align: right;
+  color: #999;
+  white-space: nowrap;
+}

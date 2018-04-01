@@ -1,5 +1,5 @@
 const en_US = {
-  hello: "Hello",
+  hello: "Delta RABD Good",
   superHello: "Hello, {someone}"
 }
 

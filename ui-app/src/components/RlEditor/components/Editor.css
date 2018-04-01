@@ -1,0 +1,53 @@
+.CodeMirror {
+  border: 1px solid #eee;
+  height: 100;
+}
+.breakpoints {
+  width: 1em;
+  background: #c8d2d7;
+  padding: 4px 0;
+}
+.CodeMirror-foldmarker {
+  color: red;
+  text-shadow: #b9f 1px 1px 2px, #b9f -1px -1px 2px, #b9f 1px -1px 2px, #b9f -1px 1px 2px;
+  font-family: arial;
+  line-height: .3;
+  cursor: pointer;
+}
+.CodeMirror-foldgutter {
+  width: 1em;
+}
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded {
+  cursor: pointer;
+}
+.CodeMirror-foldgutter-open:after {
+  content: "\25BE";
+}
+.CodeMirror-foldgutter-folded:after {
+  content: "\25B8";
+}
+.CodeMirror-linenumbers {
+  width: 1em;
+  background: #c8d2d7;
+}
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 0.8em;
+  text-align: right;
+  color: #999;
+  white-space: nowrap;
+}
+
+.editor.breakpoint svg {
+  fill: red;
+  width: 60px;
+  height: 14px;
+  position: absolute;
+  top: 0px;
+  right: -4px;
+}
+
+.editor.breakpoint.breakpoint-disabled svg {
+  opacity: 0.3;
+}

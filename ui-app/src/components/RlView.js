@@ -1,38 +1,127 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
+import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
+import Paper from 'material-ui/Paper';
+import Dialog, {
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from 'material-ui/Dialog';
+import List, {
+  ListItem,
+  ListItemAvatar,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+} from 'material-ui/List';
+import Tooltip from 'material-ui/Tooltip';
 import Typography from 'material-ui/Typography';
-import TabView from './TabView';
-import PhoneIcon from 'material-ui-icons/Phone';
-import FavoriteIcon from 'material-ui-icons/Favorite';
-import PersonPinIcon from 'material-ui-icons/PersonPin';
-import HelpIcon from 'material-ui-icons/Help';
-import ShoppingBasket from 'material-ui-icons/ShoppingBasket';
-import ThumbDown from 'material-ui-icons/ThumbDown';
-import ThumbUp from 'material-ui-icons/ThumbUp';
+//Icons
+import ListIcon from 'material-ui-icons/List';
+import CodeIcon from 'material-ui-icons/Code';
+import RedoIcon from 'material-ui-icons/Redo';
+//Dialog icons
+import WarningIcon from 'material-ui-icons/Warning'
+//Project files
+import Svg from './Svg';
+import ProjectList from './ProjectList'
+import RlEditor from './RlEditor'
+import * as C from '../constants/Constants'
+//Third-party
+import SwipeableViews from 'react-swipeable-views';
+var FileSaver = require('file-saver');
 import {StartStreaming} from '../javascripts/camvasmodules.js';
+
+var axios = require('axios');
+// Texts
+import * as texts from '../constants/DialogConstants'
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 0,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.dark,
     position: 'absolute',
     right: 0,
     left: 0,
     top: 0,
+    bottom: 0,
+  },
+  naviBar: {
+    position: 'fixed',
+    flexGrow: 1,
+    marginTop: 0,
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    top: 0,
+    left: C.menuWidth,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  naviBarShift: {
+    position: 'fixed',
+    marginTop: 0,
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    top: 0,
+    left: C.closedMenuWidth,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  naviButton: {
+    height: C.navHeight,
+    width: C.navWidth,
+    margin: 0,
+    justifyContent: 'flex-start',
   },
   tabContainer: {
-    marginLeft: 250,
+    position: 'fixed',
+    display: 'flex',
+    flexGrow: 1,
+    margin:  0,
+    top: C.navHeight,
+    right: 0,
+    left: C.menuWidth,
+    bottom: 0,
+    height: '100vh'- C.navHeight,
+    backgroundColor: theme.palette.container.backgroundColor,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  tabContainerShift: {
+    position: 'fixed',
+    display: 'flex',
+    flexGrow: 1,
+    margin:  0,
+    top: C.navHeight,
+    right: 0,
+    left: C.closedMenuWidth,
+    bottom: 0,
+    height: '100vh'- C.navHeight,
+    backgroundColor: theme.palette.container.backgroundColor,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   }
 });
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" className={props.className} >
       {props.children}
     </Typography>
   );
@@ -42,12 +131,11 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-class MainView extends Component {
+class RlView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
-      selectedTab: 0,
+      dialogOpen: false,
     };
   }
   componentDidMount() {
@@ -55,41 +143,64 @@ class MainView extends Component {
     //StartStreaming(ctx);
   }
   handleChangeTab = (event, selectedTab) => {
-    this.setState({ selectedTab });
+    this.props.changeTab(selectedTab);
   };
+
+  handleDialogClose = () => {
+    this.setState({
+      dialogOpen: false,
+    });
+  };
+
+  handleDialogOpen = () => {
+    this.setState({
+      dialogOpen: true,
+    });
+  };
+
+  retriveProjects = () => {
+    console.log('Retrive Projects');
+
+  }
+
   render() {
     const { classes } = this.props;
-    const { selectedTab } = this.state;
+    const { code } = this.props;
+    const { currentTab } = this.props;
+    const { dialogOpen } = this.state;
+    if (this.props.openingProject) {
+      this.props.changeTab(1);
+      this.props.projectOpened();
+    }
     return(
     <div className={classes.root}>
-        <AppBar position="absolute">
-          {selectedTab === 0 && <TabContainer>RL One</TabContainer>}
-          {selectedTab === 1 && <TabContainer>RL Two</TabContainer>}
-          {selectedTab === 2 && <TabContainer>RL Three</TabContainer>}
-          {selectedTab === 3 && <TabContainer>RL Four</TabContainer>}
-          {selectedTab === 4 && <TabContainer>RL Five</TabContainer>}
-          {selectedTab === 5 && <TabContainer>RL Six</TabContainer>}
-          {selectedTab === 6 && <TabContainer>RL Seven</TabContainer>}
-          <Tabs
-            value={selectedTab}
+      <AppBar position="fixed" className={classNames(classes.naviBar, !this.props.menuOpen && classes.naviBarShift)}>
+          <BottomNavigation
+            value={currentTab}
             onChange={this.handleChangeTab}
-            scrollable
-            scrollButtons="on"
-            fullWidth
-            >
-            <Tab label="Item One" icon={<PhoneIcon />} />
-            <Tab label="Item Two" icon={<FavoriteIcon />} />
-            <Tab label="Item Three" icon={<PersonPinIcon />} />
-            <Tab label="Item Four" icon={<HelpIcon />} />
-            <Tab label="Item Five" icon={<ShoppingBasket />} />
-            <Tab label="Item Six" icon={<ThumbDown />} />
-            <Tab label="Item Seven" icon={<ThumbUp />} />
-          </Tabs>
-        </AppBar>
-        //<canvas width={1024} height={768} ref="canvas"></canvas>
+            showLabels
+            className={classes.naviButton}
+          >
+          <BottomNavigationAction label="Project List" icon={<ListIcon />} />
+          <BottomNavigationAction label="Editor" icon={<CodeIcon />} />
+        </BottomNavigation>
+      </AppBar>
+      {currentTab === 0 &&
+        <TabContainer className={classNames(classes.tabContainer, !this.props.menuOpen && classes.tabContainerShift)}>
+        <ProjectList pjtList={this.props.projectList}/>
+        </TabContainer>
+      }
+      {currentTab === 1 &&
+        <TabContainer className={classNames(classes.tabContainer, !this.props.menuOpen && classes.tabContainerShift)}>
+          <RlEditor/>
+        </TabContainer>
+      }
     </div>
     );
   }
 }
+RlView.propTypes = {
+  currentTab: PropTypes.number.isRequired,
+}
 
-export default withStyles(styles)(MainView);
+export default withStyles(styles)(RlView);

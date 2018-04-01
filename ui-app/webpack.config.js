@@ -13,7 +13,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
-
   module: {
     loaders: [
       {
@@ -25,6 +24,7 @@ module.exports = {
         loader: 'babel-loader',
         query: {
           presets: ['es2015', 'react', 'stage-2'],
+          plugins: ['babel-plugin-transform-es2015-for-of']
         }
       },
       {
@@ -36,12 +36,17 @@ module.exports = {
         loader: 'file-loader?name=fonts/[name].[ext]'
       },
       {
-        test: /\.(jpe?g|png|gif|svg|ico)$/i,
+        test: /\.(jpe?g|png|gif|ico)$/i,
         loaders: [
           'file-loader?hash=sha512&digest=hex&name=image/[hash].[ext]',
           'image-webpack-loader'
         ]
-      }
+      },
+      {
+        test: /\.svg$/,
+        // loader: 'svg-inline-loader'
+        loader: 'raw-loader'
+      },
     ]
   },
   plugins: [

@@ -2,10 +2,9 @@ import { connect } from 'react-redux';
 import ViewsCollection from '../components/ViewsCollection'
 
 const mapStateToProps = state => {
-  console.log('View state updated'); // state
-  console.log(state); // state
   return {
-    currentView: state.menuActions.selectedView
+    currentView: state.menuActions.selectedView,
+    menuOpen: state.menuActions.open
   }
 }
 

@@ -2,37 +2,98 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import classNames from 'classnames';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import BottomNavigation, { BottomNavigationAction } from 'material-ui/BottomNavigation';
 import Typography from 'material-ui/Typography';
-import TabView from './TabView';
-import PhoneIcon from 'material-ui-icons/Phone';
+import Paper from 'material-ui/Paper';
+import Button from 'material-ui/Button';
+import InfoIcon from 'material-ui-icons/Info';
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PersonPinIcon from 'material-ui-icons/PersonPin';
 import HelpIcon from 'material-ui-icons/Help';
 import ShoppingBasket from 'material-ui-icons/ShoppingBasket';
 import ThumbDown from 'material-ui-icons/ThumbDown';
 import ThumbUp from 'material-ui-icons/ThumbUp';
-import {StartStreaming} from '../javascripts/camvasmodules.js';
 
+
+import {StartStreaming} from '../javascripts/camvasmodules.js';
+import ProjectList from './ProjectList'
+import RlEditor from './RlEditor'
+import * as C from '../constants/Constants'
+
+import io from 'socket.io-client';
+const iosocket = io('http://localhost:3000');
+
+
+
+
+iosocket.on('connect', () => {
+  console.log('socket.id'); // 'G5p5...'
+});
+
+iosocket.on('message', (data) => {
+  cnt = data;
+  console.log('form Mainview');
+  console.log(data);
+});
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 0,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.dark,
     position: 'absolute',
     right: 0,
     left: 0,
     top: 0,
+    bottom: 0,
+  },
+  naviBar: {
+    position: 'fixed',
+    flexGrow: 1,
+    marginTop: 0,
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    top: 0,
+    left: 240,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  naviBarShift: {
+    position: 'fixed',
+    marginTop: 0,
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.paper,
+    top: 0,
+    left: 60,
+    transition: theme.transitions.create(['left', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  naviButton: {
+    height: C.navHeight,
+    margin: 0,
+    justifyContent: 'flex-start',
   },
   tabContainer: {
-    marginLeft: 250,
+    position: 'absolute',
+    display: 'flex',
+    flexGrow: 1,
+    margin:  0,
+    top: C.navHeight,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: theme.palette.container.backgroundColor,
   }
 });
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" className={props.className} >
       {props.children}
     </Typography>
   );
@@ -57,37 +118,34 @@ class MainView extends Component {
   handleChangeTab = (event, selectedTab) => {
     this.setState({ selectedTab });
   };
+
   render() {
     const { classes } = this.props;
     const { currentView } = this.props;
     const { selectedTab } = this.state;
     return(
     <div className={classes.root}>
-        <AppBar position="absolute">
-          <Tabs
-            value={selectedTab}
-            onChange={this.handleChangeTab}
-            scrollable
-            scrollButtons="on"
-            fullWidth
-            >
-            <Tab label="Item One" icon={<PhoneIcon />} />
-            <Tab label="Item Two" icon={<FavoriteIcon />} />
-            <Tab label="Item Three" icon={<PersonPinIcon />} />
-            <Tab label="Item Four" icon={<HelpIcon />} />
-            <Tab label="Item Five" icon={<ShoppingBasket />} />
-            <Tab label="Item Six" icon={<ThumbDown />} />
-            <Tab label="Item Seven" icon={<ThumbUp />} />
-          </Tabs>
-          {selectedTab === 0 && <TabContainer>{currentView}Item One</TabContainer>}
-          {selectedTab === 1 && <TabContainer>Item Two</TabContainer>}
-          {selectedTab === 2 && <TabContainer>Item Three</TabContainer>}
-          {selectedTab === 3 && <TabContainer>Item Four</TabContainer>}
-          {selectedTab === 4 && <TabContainer>Item Five</TabContainer>}
-          {selectedTab === 5 && <TabContainer>Item Six</TabContainer>}
-          {selectedTab === 6 && <TabContainer>Item Seven</TabContainer>}
-        </AppBar>
-        //<canvas width={1024} height={768} ref="canvas"></canvas>
+    <AppBar position="fixed" className={classNames(classes.naviBar, !this.props.menuOpen && classes.naviBarShift)}>
+        <BottomNavigation
+          value={selectedTab}
+          onChange={this.handleChangeTab}
+          showLabels
+          className={classes.naviButton}
+        >
+        <BottomNavigationAction label="System Information" icon={<InfoIcon />} />
+        <BottomNavigationAction label="Recents" icon={<InfoIcon />} />
+      </BottomNavigation>
+    </AppBar>
+      {selectedTab === 0 &&
+        <TabContainer className={classes.tabContainer}>
+        KKK
+        </TabContainer>
+      }
+      {selectedTab === 1 &&
+        <TabContainer className={classes.tabContainer}>
+        JJJ
+        </TabContainer>
+      }
     </div>
     );
   }

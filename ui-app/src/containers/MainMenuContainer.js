@@ -1,22 +1,28 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { changeView, testAction } from '../Actions';
+import * as actions from '../Actions';
 import {menuActions} from '../Reducers';
 import MainMenu from '../components/MainMenu';
 
 
 const mapStateToProps = state => {
-  console.log('MainMenu state updated'); // state
-  console.log(state); // state
   return {
-    selectedView: state.menuActions.selectedView
+    selectedView: state.menuActions.selectedView,
+    open: state.menuActions.open,
+    userName : state.menuActions.userName,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onMenuButtonClick: (idx) => {
-      dispatch(changeView(idx))
+      dispatch(actions.changeView(idx))
+    },
+    openMenu: () => {
+      dispatch(actions.openMenu())
+    },
+    closeMenu: () => {
+      dispatch(actions.closeMenu())
     }
   };
 }
